@@ -16,7 +16,7 @@
         @if ($roomAnswers->where('level', $level)->count() > 0)
           <div class="col-md-4">
             <div class="card p-3">
-              <div class="level-title mb-3">Level {{ $level }} (Sudah Selesai)</div>
+              <div class="level-title mb-3">Level {{ $level }} <br/>(Sudah Selesai)</div>
               <button class="btn btn-outline-secondary btn-difficulty" disabled>Level Sudah Selesai</button>
             </div>
           </div>
