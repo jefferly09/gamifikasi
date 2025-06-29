@@ -16,7 +16,6 @@ class StudentRoomController extends Controller
     $difficulties = Difficulty::all();
 
     $roomAnswers = RoomAnswer::where('student_id', session()->get('student_id'))
-      ->where('level', session()->get('level'))
       ->get();
 
     return view("main2/level", [
