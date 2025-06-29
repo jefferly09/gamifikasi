@@ -9,9 +9,11 @@ class LeaderboardController extends Controller
 {
   function index(Request $request)
   {
-    $scores = Score::orderBy("score", "desc")
+    $scores = Score::selectRaw("student_id, SUM(score) as total_score")
+      ->groupBy("student_id")
+      ->orderBy("total_score", "desc")
       ->with("student")
-      ->paginate(10);
+      ->get();
 
     return view("main/leaderboard", [
       "title" => "Leaderboard",

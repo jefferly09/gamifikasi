@@ -19,15 +19,19 @@
                   <th>Peringkat</th>
                   <th>Nama</th>
                   <th>Skor</th>
-
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Alice</td>
-                  <td>98</td>
-                </tr>
+                @php
+                  $number = 1;
+                @endphp
+                @foreach ($scores as $score)
+                  <tr>
+                    <td>{{ $number++ }}</td>
+                    <td>{{ $score->student->name }}</td>
+                    <td>{{ $score->total_score }}</td>
+                  </tr>
+                @endforeach
             </table>
           </div>
         </div>

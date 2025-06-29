@@ -5,41 +5,41 @@ namespace App\Http\Controllers\Room;
 use App\Http\Controllers\Controller;
 use App\Models\Difficulty;
 use App\Models\Question;
+use App\Models\RoomAnswer;
 use Illuminate\Http\Request;
 
 class StudentRoomController extends Controller
 {
-  function index(Request $request)
-  {
-    $questions = Question::where("level", session()->get("level"))
-      ->inRandomOrder()
-      ->get();
-
-
-    return view("main/room/student", [
-      "title" => "Student Room",
-      "questions" => $questions
-    ]);
-  }
-
   function viewChoseDifficulty(Request $request)
   {
+    $levels = [1, 2];
     $difficulties = Difficulty::all();
-    return view("main/room/chose-difficulty", [
-      "title" => "Chose Difficulty",
-      "difficulties" => $difficulties
+
+    $roomAnswers = RoomAnswer::where('student_id', session()->get('student_id'))
+      ->where('level', session()->get('level'))
+      ->get();
+
+    return view("main2/level", [
+      "title"         => "Chose Difficulty",
+      "difficulties"  => $difficulties,
+      "levels"        => $levels,
+      "roomAnswers"   => $roomAnswers,
     ]);
   }
 
-  function choseDifficulty(Request $request)
+  function choseDifficulty(Request $request, $level, $difficultyId)
   {
-    session()->put("difficult_id", $request->get("difficult_id"));
+    session()->put("difficult_id", $difficultyId);
+    session()->put("level", $level);
 
-    return redirect()->route("room.student.index");
-  }
+    $room = RoomAnswer::create([
+      'student_id'    => session()->get('student_id'),
+      'difficulty_id' => $difficultyId,
+      'level'         => $level,
+    ]);
 
-  function form(Request $request)
-  {
+    session()->put("room_id", $room->id);
 
+    return redirect()->route("room.quiz");
   }
 }

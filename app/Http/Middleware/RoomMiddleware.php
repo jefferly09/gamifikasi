@@ -17,7 +17,9 @@ class RoomMiddleware
   public function handle(Request $request, Closure $next): Response
   {
     if(session()->get("student_id") === null) {
-      throw new Exception("You must be logged in as a student to access this page.", 403);
+      return redirect()->route("main.index")->withErrors([
+        "message" => "You must register first before accessing the room."
+      ]);
     }
 
     return $next($request);

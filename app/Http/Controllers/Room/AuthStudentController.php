@@ -8,22 +8,30 @@ use Illuminate\Http\Request;
 
 class AuthStudentController extends Controller
 {
-  function index() {}
+  function index() {
+    return view('main2/form_student');
+  }
 
   function form(Request $request)
   {
     $validate = $request->validate([
-      "name" => "required|string|max:255",
-      "attendance_number" => "required|string|max:255|unique:students,attendance_number",
-      "classroom" => "required|string|max:255",
-      "sex" => "required|in:M,F"
+      "name"              => "required|string|max:255",
+      "attendance_number" => "required|string|max:255",
+      "classroom"         => "required|string|max:255",
+      "sex"               => "required|in:M,F"
     ]);
 
-    $student = Student::create($request->all());
+    $student = Student::where("attendance_number", $request->attendance_number)->first();
+    if (!$student) {
+      $student = Student::create($request->all());
+    }
 
     session()->put("student_id", $student->id);
     session()->put("level", 1);
 
-    return redirect()->route('students.index');
+    return redirect()->route('room.homepage')->with([
+      "message" => "Welcome to the room, " . $student->name . "!",
+      "alert-type" => "success"
+    ]);
   }
 }
