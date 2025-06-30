@@ -21,7 +21,7 @@ class AuthStudentController extends Controller
       "sex"               => "required|in:M,F"
     ]);
 
-    $student = Student::where("attendance_number", $request->attendance_number)->first();
+    $student = Student::where("attendance_number", $request->attendance_number)->where("classroom", $request->classroom)->first();
     if (!$student) {
       $student = Student::create($request->all());
     }
